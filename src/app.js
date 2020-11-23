@@ -4,7 +4,7 @@ const morgan = require('morgan')
 const cors = require('cors')
 const helmet = require('helmet')
 const { NODE_ENV } = require('./config')
-const errorHandler = require('./error-handler')
+const errorHandler = require('./middleware/error-handler')
 
 const app = express()
 const authRouter = require('./auth/auth-router')
@@ -19,7 +19,7 @@ app.use(helmet())
 app.use(boilerplateRouter)
 
 app.get('/', (req, res) => {
-  res.send('Welcome to collaborate!')
+  res.send('Welcome to the Collaborate Server')
 })
 
 app.use(errorHandler)
