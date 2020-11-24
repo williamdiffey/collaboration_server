@@ -1,10 +1,10 @@
-'use strict'
+// 'use strict'
 
 const express = require('express')
-const path = path('path')
+const path = require('path')
 const UserService = require('./user-service')
 const { requireAuth } = require('../middleware/jwt-auth')
-const { mailer } = require('../modemailer/nodemailer')
+const { mailer } = require('../nodemailer/nodemailer')
 
 const userRouter = express.Router()
 const bodyParser = express.json()

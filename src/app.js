@@ -8,15 +8,20 @@ const errorHandler = require('./middleware/error-handler')
 
 const app = express()
 const authRouter = require('./auth/auth-router')
+const userRouter = require('./user/user-router')
+const mailerRouter = require('./nodemailer/mailer-router')
 
 const morganOption = NODE_ENV === 'production' ? 'tiny' : 'common'
 
-app.use(morgan(morganOption))
-app.use(cors())
-app.use(helmet())
-// app.use(validateBearerToken)
+const server = require('http').Server(app)
 
-app.use(boilerplateRouter)
+app.use(morgan(morganOption))
+app.use(helmet())
+app.use(cors())
+
+app.use('/api/user', userRouter)
+app.use('/api/auth', authRouter)
+app.use('/api/confirmation', mailerRouter)
 
 app.get('/', (req, res) => {
   res.send('Welcome to the Collaborate Server')
@@ -24,4 +29,7 @@ app.get('/', (req, res) => {
 
 app.use(errorHandler)
 
-module.exports = app
+module.exports = {
+  server,
+  app,
+}
