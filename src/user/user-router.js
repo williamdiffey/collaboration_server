@@ -23,7 +23,7 @@ userRouter.post('/', bodyParser, async (req, res, next) => {
     if (passwordError) error.passwordError = passwordError
 
     const hasUserWithUserName = await UserService.hasUserWithUserName(
-      req.app.getMaxListeners('db'),
+      req.app.get('db'),
       username,
     )
     if (hasUserWithUserName) error.usernameError = 'Username is already taken'
@@ -39,13 +39,13 @@ userRouter.post('/', bodyParser, async (req, res, next) => {
       return res.status(400).json(error)
     }
 
-    const hashedPassword = await UserService.hashedPassword(password)
+    const hashedPassword = await UserService.hashPassword(password)
     const newUser = {
       username: username,
       password: hashedPassword,
       email,
     }
-    const user = await UserService.insetUser(req.app.get('db'), newUser)
+    const user = await UserService.insertUser(req.app.get('db'), newUser)
     await mailer(user)
     res
       .status(201)
@@ -83,7 +83,7 @@ userRouter.patch(
         })
       }
       if (password) {
-        const hashedPassword = await UserService.hashedPassword(password)
+        const hashedPassword = await UserService.hashPassword(password)
         updates.password = hashedPassword
       }
       if (email) {

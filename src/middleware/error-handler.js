@@ -4,7 +4,8 @@ module.exports = function errorHandler(error, req, res) {
   const response =
     NODE_ENV === 'production'
       ? { error: 'Server Error' }
-      : (console.error(error), { error: error.message, details: error })
+      : (console.error(error),
+        (response = { error: error.message, details: error }))
 
   res.status(500).json(response)
 }

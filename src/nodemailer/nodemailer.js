@@ -41,8 +41,7 @@ function mailer(user) {
       } else 'Email sent'
     })
   } catch (error) {
-    //   clean up
-    next(error)
+    console.log(error)
   }
 }
 
