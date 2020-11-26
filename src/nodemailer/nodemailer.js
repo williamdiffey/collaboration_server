@@ -7,13 +7,16 @@ function mailer(user) {
     console.log('connected')
 
     const transporter = nodemailer.createTransport({
-      host: 'smpt.gmail.com',
+      host: 'smtp.ethereal.email',
       port: 587,
-      secure: false,
-      requireTLS: true,
+      // secure: false,
+      // requireTLS: true,
       auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
+        user: 'gwendolyn.ritchie22@ethereal.email',
+        pass: 'fnFA1C7aPJzpp2F2Cs',
+
+        // user: process.env.EMAIL_USER,
+        // pass: process.env.EMAIL_PASS,
       },
     })
 
@@ -25,20 +28,20 @@ function mailer(user) {
     const url = `http://localhost:3000/confirmation/${emailToken}`
 
     let mailOptions = {
-      from: process.env.EMAIL_USER,
+      from: 'prekursorrecords@gmail.com',
       to: user.email,
       subject: 'Collaborate account confirmation',
       html: `<p>Welcome to Collaborate. 
             <br/>
             To activate your account and find likeminded creators just click the link below:
-            <a href=$"{url}">Click here to verify your Collaborate account</a>
+            <a href=${url}>Click here to verify your Collaborate account</a>
             `,
     }
 
-    transporter.sendMail(mailOptions, (err, data) => {
+    transporter.sendMail(mailOptions, (error, data) => {
       if (error) {
         console.log('There was an error', error)
-      } else 'Email sent'
+      } else `Email sent ${emailToken}`
     })
   } catch (error) {
     console.log(error)

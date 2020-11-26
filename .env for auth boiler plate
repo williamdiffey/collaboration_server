@@ -1,0 +1,5 @@
+NODE_ENV=development
+PORT=8000
+JWT_SECRET="very-secret"
+JWT_EXPIRY="3h"
+DB_URL="postgresql://superuser:123@localhost/collaborate"
