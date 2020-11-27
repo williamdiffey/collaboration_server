@@ -13,6 +13,7 @@ const mailerRouter = require('./nodemailer/mailer-router')
 
 const morganOption = NODE_ENV === 'production' ? 'tiny' : 'common'
 
+// const config = { pingTimeout: 60000 }
 const server = require('http').Server(app)
 
 app.use(morgan(morganOption))
