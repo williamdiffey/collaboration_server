@@ -1,4 +1,5 @@
-// 'use strict'
+'use strict'
+// 15 tests to check user endpoints
 
 const express = require('express')
 const path = require('path')
@@ -95,7 +96,7 @@ userRouter.patch(
 
       const user = await UserService.updateUser(
         req.app.get('db'),
-        userId,
+        userID,
         updates,
       )
       res

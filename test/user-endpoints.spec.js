@@ -66,6 +66,55 @@ describe('User Endpoints', () => {
         passwordError: 'Password must be less than 30 characters in length',
       })
     })
+    it('responds with an error if the password has no number', () => {
+      const user = {
+        email: 'test@test.com',
+        username: 'test',
+        password: 'Password!',
+      }
+
+      return supertest(app).post('/api/user').send(user).expect(400, {
+        passwordError:
+          'Password must contain at least 1 uppercase, lowercase, symbol and number',
+      })
+    })
+    it('responds with an error if the password has no symbol', () => {
+      const user = {
+        email: 'test@test.com',
+        username: 'test',
+        password: 'Password1',
+      }
+
+      return supertest(app).post('/api/user').send(user).expect(400, {
+        passwordError:
+          'Password must contain at least 1 uppercase, lowercase, symbol and number',
+      })
+    })
+    it('responds with an error if the password has no lowercase', () => {
+      const user = {
+        email: 'test@test.com',
+        username: 'test',
+        password: 'PASSWORD1!',
+      }
+
+      return supertest(app).post('/api/user').send(user).expect(400, {
+        passwordError:
+          'Password must contain at least 1 uppercase, lowercase, symbol and number',
+      })
+    })
+
+    it('responds with an error if the password has no uppercase', () => {
+      const user = {
+        email: 'test@test.com',
+        username: 'test',
+        password: 'password1!',
+      }
+
+      return supertest(app).post('/api/user').send(user).expect(400, {
+        passwordError:
+          'Password must contain at least 1 uppercase, lowercase, symbol and number',
+      })
+    })
   })
 
   describe('GET user', () => {
@@ -94,7 +143,7 @@ describe('User Endpoints', () => {
         return supertest(app).get('/api/user/1').expect(200, expected)
       })
     })
-    context('given there is a malicious entry in the user db', () => {
+    context('given there is a malicious attempt to run a script', () => {
       beforeEach('insert seed data', () => {
         const user = [
           {
@@ -146,6 +195,61 @@ describe('User Endpoints', () => {
           .patch('/api/user/1')
           .set('authorization', `bearer ${process.env.TEST_BEARER_TOKEN}`)
           .expect(400, { error: 'No new information provided' })
+      })
+    })
+    context('given the user exists', () => {
+      beforeEach('insert seed data', () => {
+        const user = [
+          {
+            id: 1,
+            username: 'test',
+            avatar_url: 'https://i.imgur.com/eqaKDBlt.jpg',
+            email: 'test@test.com',
+            password:
+              '$2y$12$R6sg9E77/5c41GJZIGqlH.UH73UPmxFwa6S6U1DMvA4MjSgIyGtVG',
+          },
+        ]
+        return db.into('users').insert(user)
+      })
+      it('responds with 201 when updating avatar URL', () => {
+        const updates = {
+          avatar_url: 'https://i.imgur.com/newimage.jpg',
+        }
+        const expected = {
+          updates: {
+            avatar_url: 'https://i.imgur.com/newimage.jpg',
+          },
+        }
+        return supertest(app)
+          .patch('/api/user/1')
+          .set('authorization', `bearer ${process.env.TEST_BEARER_TOKEN}`)
+          .send(updates)
+          .expect(201, expected)
+      })
+      it('responds with 201 when updating password', () => {
+        const updates = {
+          password: 'NewPassword2!',
+        }
+        return supertest(app)
+          .patch('/api/user/1')
+          .set('authorization', `bearer ${process.env.TEST_BEARER_TOKEN}`)
+          .send(updates)
+          .expect(201)
+      })
+      it('responds with 201 when updating email', () => {
+        const updates = {
+          email: 'test2@test.com',
+        }
+        const expected = {
+          updates: {
+            email: 'test2@test.com',
+          },
+        }
+        return supertest(app)
+          .patch('/api/user/1')
+          .set('authorization', `bearer ${process.env.TEST_BEARER_TOKEN}`)
+          .send(updates)
+          .expect(201, expected)
       })
     })
   })
