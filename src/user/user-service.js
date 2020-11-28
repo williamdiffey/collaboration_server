@@ -43,7 +43,7 @@ const UserService = {
       return 'Password must be at least 6 characters in length'
     }
     if (password.length > 30) {
-      return 'Password must be less that 30 characters in length'
+      return 'Password must be less than 30 characters in length'
     }
     if (password.startsWith(' ') || password.endsWith(' ')) {
       return 'Password must not start of end with empty spaces'
