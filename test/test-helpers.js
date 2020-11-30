@@ -1,3 +1,9 @@
+function cleanTables(db) {
+  return db.raw(`
+   TRUNCATE users;
+  `)
+}
+
 function cleanUserTable(db) {
   // drop rather than truncate to avoid primary key increments breaking
   // expected values when returning a new user
@@ -16,4 +22,5 @@ function cleanUserTable(db) {
 
 module.exports = {
   cleanUserTable,
+  cleanTables,
 }
