@@ -10,6 +10,7 @@ const app = express()
 const authRouter = require('./auth/auth-router')
 const userRouter = require('./user/user-router')
 const mailerRouter = require('./nodemailer/mailer-router')
+const ctypesRouter = require('./ctypes/ctypes-router')
 
 const morganOption = NODE_ENV === 'production' ? 'tiny' : 'common'
 
@@ -23,6 +24,7 @@ app.use(cors())
 app.use('/api/user', userRouter)
 app.use('/api/auth', authRouter)
 app.use('/api/confirmation', mailerRouter)
+app.use('/api/ctype', ctypesRouter)
 
 app.get('/', (req, res) => {
   res.send('Welcome to the Collaborate Server')
